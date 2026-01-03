@@ -7,14 +7,28 @@
     <title>Financial Planner | Smart Allocation</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="https://code.highcharts.com/highcharts-3d.js"></script>
+    
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
         body { font-family: 'Inter', sans-serif; }
+        
         .glass-card {
             background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(10px);
             border: 1px solid rgba(226, 232, 240, 1);
         }
+
+        /* Highcharts container styling */
+        #container-chart {
+            height: 300px;
+            width: 100%;
+            margin: 0 auto;
+        }
+        
+        /* Remove Highcharts credits for cleaner look */
+        .highcharts-credits { display: none; }
     </style>
 </head>
 
@@ -43,7 +57,7 @@
         <div class="relative">
             <div class="absolute -top-10 -left-10 w-64 h-64 bg-blue-200 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-pulse"></div>
             
-            <div class="glass-card p-8 rounded-3xl shadow-2xl relative z-10">
+            <div class="glass-card p-6 md:p-8 rounded-3xl shadow-2xl relative z-10">
                 <div class="flex justify-between items-center mb-6">
                     <h3 class="font-bold text-xl">Income Distribution</h3>
                     <i class="fas fa-chart-pie text-blue-500 text-xl"></i>
@@ -58,29 +72,31 @@
                         </div>
                     </div>
 
+                    <div id="container-chart"></div>
+
                     <hr class="border-slate-100">
 
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4" id="allocationBox">
                         
-                        <div class="p-4 bg-blue-50 rounded-xl border border-blue-100">
+                        <div class="p-4 bg-blue-50 rounded-xl border border-blue-100 transition hover:shadow-md">
                             <div class="text-xs text-blue-600 font-bold uppercase mb-1">50% Regular Expenses</div>
                             <div class="text-2xl font-bold text-slate-800" id="val-regular">$0.00</div>
                             <p class="text-xs text-slate-500 mt-1">Rent, bills, groceries</p>
                         </div>
 
-                        <div class="p-4 bg-red-50 rounded-xl border border-red-100">
+                        <div class="p-4 bg-red-50 rounded-xl border border-red-100 transition hover:shadow-md">
                             <div class="text-xs text-red-600 font-bold uppercase mb-1">20% Debt Repayment</div>
                             <div class="text-2xl font-bold text-slate-800" id="val-debt">$0.00</div>
                             <p class="text-xs text-slate-500 mt-1">Pay off outstanding debts</p>
                         </div>
 
-                        <div class="p-4 bg-green-50 rounded-xl border border-green-100">
+                        <div class="p-4 bg-green-50 rounded-xl border border-green-100 transition hover:shadow-md">
                             <div class="text-xs text-green-600 font-bold uppercase mb-1">20% Low Risk Inv.</div>
                             <div class="text-2xl font-bold text-slate-800" id="val-low">$0.00</div>
                             <p class="text-xs text-slate-500 mt-1">Bonds, Savings, Reserve</p>
                         </div>
 
-                        <div class="p-4 bg-purple-50 rounded-xl border border-purple-100">
+                        <div class="p-4 bg-purple-50 rounded-xl border border-purple-100 transition hover:shadow-md">
                             <div class="text-xs text-purple-600 font-bold uppercase mb-1">5% High Risk Inv.</div>
                             <div class="text-2xl font-bold text-slate-800" id="val-high">$0.00</div>
                             <p class="text-xs text-slate-500 mt-1">Stocks, Crypto, ETFs</p>
@@ -104,33 +120,33 @@
             </div>
             
             <div class="grid md:grid-cols-3 gap-8">
-                <div class="p-8 rounded-2xl bg-slate-50 border border-slate-200 hover:border-blue-300 transition group">
+                <div class="p-8 rounded-2xl bg-slate-50 border border-slate-200 hover:border-blue-300 transition group cursor-pointer">
                     <div class="w-12 h-12 bg-white rounded-lg flex items-center justify-center text-blue-600 mb-6 shadow-sm group-hover:scale-110 transition">
                         <i class="fas fa-snowflake text-xl"></i>
                     </div>
                     <h4 class="text-xl font-bold mb-3">Snowball Method</h4>
                     <p class="text-slate-600 text-sm leading-relaxed">
-                        List your debts from <strong>smallest to largest</strong> balance (ignoring interest rates). Pay minimums on all, and attack the smallest debt with everything left. Once paid, roll that money into the next smallest.
+                        List your debts from <strong>smallest to largest</strong> balance (ignoring interest rates). Pay minimums on all, and attack the smallest debt with everything left.
                     </p>
                 </div>
 
-                <div class="p-8 rounded-2xl bg-slate-50 border border-slate-200 hover:border-red-300 transition group">
+                <div class="p-8 rounded-2xl bg-slate-50 border border-slate-200 hover:border-red-300 transition group cursor-pointer">
                     <div class="w-12 h-12 bg-white rounded-lg flex items-center justify-center text-red-600 mb-6 shadow-sm group-hover:scale-110 transition">
                         <i class="fas fa-mountain text-xl"></i>
                     </div>
                     <h4 class="text-xl font-bold mb-3">Avalanche Method</h4>
                     <p class="text-slate-600 text-sm leading-relaxed">
-                        Mathematically most efficient. List debts by <strong>highest interest rate</strong>. Pay minimums on everything else and focus all extra cash on the debt with the highest rate to save money on interest in the long run.
+                        Mathematically most efficient. List debts by <strong>highest interest rate</strong>. Focus all extra cash on the debt with the highest rate to save on interest.
                     </p>
                 </div>
 
-                <div class="p-8 rounded-2xl bg-slate-50 border border-slate-200 hover:border-green-300 transition group">
+                <div class="p-8 rounded-2xl bg-slate-50 border border-slate-200 hover:border-green-300 transition group cursor-pointer">
                     <div class="w-12 h-12 bg-white rounded-lg flex items-center justify-center text-green-600 mb-6 shadow-sm group-hover:scale-110 transition">
                         <i class="fas fa-handshake text-xl"></i>
                     </div>
-                    <h4 class="text-xl font-bold mb-3">Consolidation & Negotiation</h4>
+                    <h4 class="text-xl font-bold mb-3">Consolidation</h4>
                     <p class="text-slate-600 text-sm leading-relaxed">
-                        Swap expensive debts (like credit cards) for a personal loan with a lower interest rate. Call your creditors and offer a lump-sum cash settlement using your 20% debt allocation fund.
+                        Swap expensive debts (like credit cards) for a personal loan with a lower interest rate. Call your creditors and offer a lump-sum cash settlement.
                     </p>
                 </div>
             </div>
@@ -138,34 +154,103 @@
     </section>
 
     <script>
+        // DOM Elements
         const incomeInput = document.getElementById('incomeInput');
-        
-        // Display Elements
         const regularDisplay = document.getElementById('val-regular');
         const debtDisplay = document.getElementById('val-debt');
         const lowRiskDisplay = document.getElementById('val-low');
         const highRiskDisplay = document.getElementById('val-high');
 
-        function formatCurrency(value) {
-            return new Intl.NumberFormat('en-US', {
-                style: 'currency',
-                currency: 'USD'
-            }).format(value);
-        }
+        // Formatter
+        const formatter = new Intl.NumberFormat('en-US', {
+            style: 'currency',
+            currency: 'USD'
+        });
+
+        // Initialize Highcharts 3D Pie
+        const chart = Highcharts.chart('container-chart', {
+            chart: {
+                type: 'pie',
+                backgroundColor: 'transparent', // Transparent to blend with glass card
+                options3d: {
+                    enabled: true,
+                    alpha: 45,
+                    beta: 0
+                }
+            },
+            title: { text: null },
+            plotOptions: {
+                pie: {
+                    allowPointSelect: true,
+                    cursor: 'pointer',
+                    depth: 35, // Thickness of 3D pie
+                    innerSize: '40%', // Makes it a donut-like 3D shape
+                    dataLabels: {
+                        enabled: false // Cleaner look without messy lines
+                    },
+                    showInLegend: true
+                }
+            },
+            legend: {
+                itemStyle: { fontSize: '12px', fontWeight: 'bold', color: '#475569' },
+                itemHoverStyle: { color: '#000' }
+            },
+            colors: [
+                '#3b82f6', // Blue (Regular)
+                '#ef4444', // Red (Debt)
+                '#22c55e', // Green (Low Risk)
+                '#a855f7', // Purple (High Risk)
+                '#94a3b8'  // Gray (Free)
+            ],
+            tooltip: {
+                pointFormat: '<b>{point.y:.2f}%</b> of Income'
+            },
+            series: [{
+                name: 'Allocation',
+                data: [
+                    ['Regular Exp.', 50],
+                    ['Debt Repayment', 20],
+                    ['Low Risk Inv.', 20],
+                    ['High Risk Inv.', 5],
+                    ['Free/Leisure', 5]
+                ]
+            }]
+        });
 
         function calculateAllocation() {
-            const income = parseFloat(incomeInput.value) || 0;
+            const income = parseFloat(incomeInput.value);
 
-            // Business Logic
-            // 50% Regular Expenses
-            // 20% Low Risk Inv
-            // 5% High Risk Inv
-            // 20% Debt Repayment
+            // Handle empty or invalid input
+            if (!income || isNaN(income)) {
+                regularDisplay.innerText = "$0.00";
+                debtDisplay.innerText = "$0.00";
+                lowRiskDisplay.innerText = "$0.00";
+                highRiskDisplay.innerText = "$0.00";
+                
+                // Reset chart to empty/default visual if needed, 
+                // but keeping percentage distribution is usually better UX
+                return; 
+            }
+
+            // Calculation Logic
+            const regular = income * 0.50;
+            const debt = income * 0.20;
+            const lowRisk = income * 0.20;
+            const highRisk = income * 0.05;
             
-            regularDisplay.innerText = formatCurrency(income * 0.50);
-            lowRiskDisplay.innerText = formatCurrency(income * 0.20);
-            highRiskDisplay.innerText = formatCurrency(income * 0.05);
-            debtDisplay.innerText = formatCurrency(income * 0.20);
+            // UI Updates
+            regularDisplay.innerText = formatter.format(regular);
+            debtDisplay.innerText = formatter.format(debt);
+            lowRiskDisplay.innerText = formatter.format(lowRisk);
+            highRiskDisplay.innerText = formatter.format(highRisk);
+
+            // Note: Chart percentages (50, 20, 20, 5, 5) are static ratios 
+            // in this specific model, so we don't necessarily need to update 
+            // the chart slices geometry, but we can update the TOOLTIP values 
+            // if we wanted to show absolute $ on hover.
+            
+            // Example of updating chart series dynamically if logic changed:
+            // chart.series[0].setData([...new data...]);
         }
 
         incomeInput.addEventListener('input', calculateAllocation);
